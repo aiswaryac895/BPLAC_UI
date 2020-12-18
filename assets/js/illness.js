@@ -2807,7 +2807,7 @@ function disableBankDetailsOnHavingData() {
     document.getElementById("field_Bank").style.cursor = "no-drop";
 }
 
-debugger
+
 // When the user clicks anywhere outside of the modal, close it and remove timer 
 // window.onclick = function (event) {
 //     if (event.target == otpModal || event.target == otpExpModal || event.target == invalidOtpModal || event.target == maxResendOtp) {

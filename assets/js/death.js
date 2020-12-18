@@ -4266,7 +4266,7 @@ function addBeneficiarybankTranfer() {
     $("#step2").addClass("active");
     $("#step2>div").addClass("active");
 }
-debugger
+
 function pickUp() {
     document.getElementById('ref_number').innerHTML = referenceNumber
     payoutOption = 'PUA';
@@ -4958,7 +4958,7 @@ function closeModal() {
     $('#otpExpiry').modal('hide');
 
 }
-debugger
+
 function submitOtp() {
 
     document.getElementById('otp-btn').style.display = 'none'

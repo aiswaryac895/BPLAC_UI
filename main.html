@@ -174,9 +174,9 @@
                             </div>
                             <div class="input-group mb-3  justifyCenter"
                                 style="padding-top: 31px; padding-left: 6px;padding-right: 6px;">
-                                <input type="text" class="form-control" id="reference_number"
+                                <input type="text" class="form-control" id="reference_number" maxlength="10"
                                     placeholder="Reference Number" aria-label="Recipient's username"
-                                    aria-describedby="basic-addon2" style=" max-width: 602px; height: 62px;">
+                                    aria-describedby="basic-addon2" style=" max-width: 602px; height: 62px;" onkeypress="return isNumber(event) && checkSpcialChar(event) && checkLength(event, 10)">
                                 <div class="input-group-append">
                                     <button onclick="captcha()" class="input-group-text" id="go-btn"
                                         style="width: 82px; background-color: #b8123e !important; cursor: pointer;justify-content: center;">
@@ -195,12 +195,16 @@
                                 style="color: #b8123e; text-decoration: revert;">Where can I find my reference
                                 number?</a>
                         </div> -->
+                        <div style="justify-content: end;text-align: -webkit-center;padding-bottom: 7px;">
+                            <div style="max-width: 679px;text-align: left;" id="err_field_ref_num" class="error"></div>
+                        </div>
                         <div style="padding-bottom: 27px;justify-content: end;text-align: -webkit-center;">
                             <p style="max-width: 679px;text-align: left;">Your reference number is the 10-digit number
                                 we sent you via SMS when
                                 you submitted your
                                 claim request through our
-                                website. Lost your reference number? Kindly send us an e-mail at BPI-Philam_CustomerService@aia.com
+                                website. Lost your reference number? Kindly send us an e-mail at
+                                BPI-Philam_CustomerService@aia.com
                                 to retrieve it.</p>
 
                         </div>
@@ -1071,7 +1075,7 @@
         }
 
         function trackProgress() {
-            debugger
+             
             // api call on clicking GO button from claim status screen 
             var response = {};
             claim_type = response['claim-type']         // to show header and description based on claim type

@@ -2538,7 +2538,7 @@ var invalidOtpModal = document.getElementById('invalidOtp');
 var maxResendOtp = document.getElementById('maxResendOtp');
 var invalidOtp = 0;
 
-debugger
+
 // otp timer function
 function otpTimer() {
   document.getElementById('otp-btn').style.display = 'block'
@@ -2673,7 +2673,7 @@ function resendOtp(type) {
   // resendCount++;
 
   // if (resendCount > 5) {
-  //   debugger
+  //    
   //   $('#otpPopUp').modal('hide');
   //   $('#invalidOtp').modal('hide');
   //   $('#maxResendOtp').modal('show');
@@ -2875,7 +2875,7 @@ function submitOtp() {
   // removeTimer();
 
   // if (document.getElementById('otp').value != dummy_otp) {
-  //   debugger
+  //    
   //   invalidOtp++;
   //   if (invalidOtp < 3) {
   //     $('#invalidOtp').modal('show');

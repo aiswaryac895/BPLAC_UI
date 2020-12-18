@@ -31,7 +31,7 @@ var surveyQues3;
 var surveyAns3 = 0;
 var surveyObj = {};
 var org_claimSubType;
-var org_sourceSystem='';
+var org_sourceSystem = '';
 var survey_form = document.getElementById('customer_survey');
 survey_form.addEventListener('submit', submit_survey);
 function getAccidentPage() {
@@ -71,18 +71,45 @@ function getDeathPage() {
 }
 
 function captcha() {
-
-    // $('#refNoWarning').modal('hide');
-    if (grecaptcha && grecaptcha.getResponse().length > 0) {
-
-        referenceNumber = document.getElementById('reference_number').value
-        if (referenceNumber != null) { trackProgress(); }
+    var ref_num = $("#reference_number").val();
+    var specRefNo = specialcharacterValidation(ref_num);
+    var numRefNo = onlyNumberValidate(ref_num);
+    var lenRefNo = fieldCheckLength(ref_num, 10);
+    if (ref_num.length === 0) {
+        $("#err_field_ref_num").text('Field is empty');
+        $("#err_field_ref_num").show();
+    }
+    else if (ref_num.length != 10) {
+        $("#err_field_ref_num").text('Should consist of 10 digits');
+        $("#err_field_ref_num").show();
+    }else if (lenRefNo) {
+        $("#err_field_ref_num").text("Maximum 10 characters allowed!");
+        $("#err_field_ref_num").show();
+    } else if (specRefNo) {
+        $("#err_field_ref_num").text('Special character is not allowed');
+        $("#err_field_ref_num").show();
+    } else if (!numRefNo) {
+        $("#err_field_ref_num").text('Only number is allowed!');
+        $("#err_field_ref_num").show();
     } else {
-        $("#err_recaptcha").text('Please verify the reCAPTCHA and tick the check box before submission');
-        $("#err_recaptcha").show();
-        // activeProcess()
+        $("#err_field_ref_num").text('');
+        $("#err_field_ref_num").hide();
     }
 
+    // $('#refNoWarning').modal('hide');
+    if (ref_num.length != 0 && ref_num.length == 10 && lenRefNo == false && specRefNo == false && numRefNo == true) {
+        if (grecaptcha && grecaptcha.getResponse().length > 0) {
+
+            referenceNumber = document.getElementById('reference_number').value
+            if (referenceNumber != null) { trackProgress(); }
+        } else {
+            $("#err_recaptcha").text('Please verify the reCAPTCHA and tick the check box before submission');
+            $("#err_recaptcha").show();
+            // activeProcess()
+        }
+    } else {
+        $(`#err_field_ref_num`).show();
+    }
 
     /*before api intgrtn*/
     // // $('#refNoWarning').modal('hide');
@@ -554,7 +581,7 @@ function setAccidentClaimStatusMsg() {
     //     default: document.getElementById('claim-msg-text').innerHTML = 'No message found'
     //         break;
     // }
-    // debugger
+    //  
     // if (docsPending == 'Y') {
     //     var finalDocsList = '';
     //     requirementsList.forEach(function (item) {
@@ -752,7 +779,7 @@ function setIllnessClaimStatusMsg() {
     // }
 
 }
-debugger
+
 
 function setDeathClaimStatusMsg() {
     if (sourceSystem.toLowerCase().trim() == 'tips') {
@@ -1130,7 +1157,7 @@ function submit_survey(event) {
 
     event.preventDefault();
     if (org_sourceSystem == '' || org_sourceSystem == null) {
-        org_sourceSystem='cms'
+        org_sourceSystem = 'cms'
     }
     var survey_data =
     {
@@ -1249,4 +1276,105 @@ function backToFileClaim() {
     window.location.href = "main.html";
 
 
+}
+
+
+var validateRefNumber = false;
+function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        $(`#err_field_ref_num`).text('Only numbers allowed!');
+        $(`#err_field_ref_num`).show();
+        // document.getElementById('go-btn').disabled = true;
+        // document.getElementById('go-btn').style.cursor = 'no-drop'
+        // document.getElementById('go-btn').style.opacity = '0.65'
+        validateRefNumber = false;
+        return false;
+
+    }
+    $(`#err_field_ref_num`).text('');
+    $(`#err_field_ref_num`).hide();
+    // document.getElementById('go-btn').disabled = false;
+    // document.getElementById('go-btn').style.cursor = 'pointer'
+    validateRefNumber = true
+    return true;
+}
+function checkLength(evt, max_Length) {
+    let id = evt.target.id;
+    var val = document.getElementById(id).value;
+    var length = val.length;
+    if (length >= max_Length) {
+        $(`#err_field_ref_num`).text("Maximum " + max_Length + " digits allowed!");
+        $(`#err_field_ref_num`).show();
+        // document.getElementById('go-btn').disabled = true;
+        // document.getElementById('go-btn').style.cursor = 'no-drop'
+        // document.getElementById('go-btn').style.opacity = '0.65'
+        validateRefNumber = false;
+    } else {
+        validateRefNumber = true;
+        // document.getElementById('go-btn').disabled = false;
+        // document.getElementById('go-btn').style.cursor = 'pointer'
+        detection(evt);
+    }
+}
+
+function checkSpcialChar(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (!((evt.charCode >= 65) && (evt.charCode <= 90) || (evt.charCode >= 97)
+        && (evt.charCode <= 122) || (evt.charCode >= 48) && (evt.charCode <= 57) || (evt.charCode == 32) || (evt.charCode == 13))) {
+        $(`#err_field_ref_num`).text("special character is not allowed");
+        $(`#err_field_ref_num`).show();
+        // document.getElementById('go-btn').disabled = true;
+        // document.getElementById('go-btn').style.cursor = 'no-drop'
+        // document.getElementById('go-btn').style.opacity = '0.65'
+        validateRefNumber = false;
+        return false;
+    }
+    $(`#err_field_ref_num`).text("");
+    $(`#err_field_ref_num`).hide();
+    // document.getElementById('go-btn').disabled = false;
+    // document.getElementById('go-btn').style.cursor = 'pointer'
+    validateRefNumber = true;
+    return true;
+}
+function detection(evt) {
+    id = evt.target.id;
+    document.getElementById(id).addEventListener('keydown', event => {
+        if (event.key == 'Backspace') {
+            $(`#err_field_ref_num`).text("");
+            $(`#err_field_ref_num`).hide();
+        }
+    })
+}
+
+function specialcharacterValidation(input) {
+    var regex = /^[A-Za-z0-9 ]+$/
+    var val = regex.test(input);
+    if (!val) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function onlyNumberValidate(input) {
+    var regex = /^[0-9]*$/;
+    var val = regex.test(input);
+    if (val) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function fieldCheckLength(field, maxLength) {
+    var length = field.length;
+    if (length > maxLength) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
